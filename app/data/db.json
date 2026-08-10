@@ -1,0 +1,190 @@
+{
+  "users": [],
+  "orders": [],
+  "menu": [
+    {
+      "id": "meatpie",
+      "name": "Meatpie",
+      "category": "Pastries",
+      "price": 900,
+      "minQty": 10,
+      "available": true,
+      "prepMinutes": 35
+    },
+    {
+      "id": "sausage",
+      "name": "Sausage Roll",
+      "category": "Pastries",
+      "price": 700,
+      "minQty": 10,
+      "available": true,
+      "prepMinutes": 30
+    },
+    {
+      "id": "shawarma-beef",
+      "name": "Shawarma (Beef)",
+      "category": "Meals",
+      "price": 3000,
+      "minQty": 5,
+      "available": true,
+      "prepMinutes": 45
+    },
+    {
+      "id": "shawarma-chicken",
+      "name": "Shawarma (Chicken)",
+      "category": "Meals",
+      "price": 3800,
+      "minQty": 5,
+      "available": true,
+      "prepMinutes": 45
+    },
+    {
+      "id": "shawarma-hotdog",
+      "name": "Shawarma (Hotdog)",
+      "category": "Meals",
+      "price": 3500,
+      "minQty": 5,
+      "available": true,
+      "prepMinutes": 45
+    },
+    {
+      "id": "shawarma-chicken-hotdog",
+      "name": "Shawarma (Chicken & Hotdog)",
+      "category": "Meals",
+      "price": 4300,
+      "minQty": 5,
+      "available": true,
+      "prepMinutes": 50
+    },
+    {
+      "id": "shawarma-beef-chicken",
+      "name": "Shawarma (Beef & Chicken)",
+      "category": "Meals",
+      "price": 4200,
+      "minQty": 5,
+      "available": true,
+      "prepMinutes": 50
+    },
+    {
+      "id": "shawarma-jumbo",
+      "name": "Shawarma (Jumbo)",
+      "category": "Meals",
+      "price": 5300,
+      "minQty": 3,
+      "available": true,
+      "prepMinutes": 55
+    },
+    {
+      "id": "shawarma-super-jumbo",
+      "name": "Shawarma (Super Jumbo)",
+      "category": "Meals",
+      "price": 6500,
+      "minQty": 2,
+      "available": true,
+      "prepMinutes": 60
+    },
+    {
+      "id": "shawarma-special",
+      "name": "Shawarma (La_Bliss Special)",
+      "category": "Meals",
+      "price": 7000,
+      "minQty": 2,
+      "available": true,
+      "prepMinutes": 60
+    },
+    {
+      "id": "spaghetti",
+      "name": "Spaghetti Pack",
+      "category": "Meals",
+      "price": 2500,
+      "minQty": 5,
+      "available": true,
+      "prepMinutes": 50
+    },
+    {
+      "id": "fruit-parfait",
+      "name": "Fruit Parfait",
+      "category": "Treats",
+      "price": 1800,
+      "minQty": 6,
+      "available": true,
+      "prepMinutes": 25
+    },
+    {
+      "id": "yogurt",
+      "name": "Yogurt",
+      "category": "Drinks",
+      "price": 1200,
+      "minQty": 6,
+      "available": true,
+      "prepMinutes": 15
+    },
+    {
+      "id": "soft-drink",
+      "name": "Soft Drink",
+      "category": "Drinks",
+      "price": 500,
+      "minQty": 12,
+      "available": true,
+      "prepMinutes": 10
+    },
+    {
+      "id": "juice",
+      "name": "Juice",
+      "category": "Drinks",
+      "price": 1000,
+      "minQty": 6,
+      "available": true,
+      "prepMinutes": 10
+    }
+  ],
+  "deliveryZones": [
+    {
+      "id": "pickup",
+      "name": "Pickup at store",
+      "km": 0,
+      "minutes": 0
+    },
+    {
+      "id": "near",
+      "name": "Nearby, 0-5 km",
+      "km": 5,
+      "minutes": 20
+    },
+    {
+      "id": "mid",
+      "name": "Within town, 6-12 km",
+      "km": 12,
+      "minutes": 35
+    },
+    {
+      "id": "far",
+      "name": "Farther location, 13-25 km",
+      "km": 25,
+      "minutes": 60
+    },
+    {
+      "id": "custom",
+      "name": "Custom distance",
+      "km": 1,
+      "minutes": 15
+    }
+  ],
+  "businessInfo": {
+    "businessName": "Labliss Cakes and Sweeties",
+    "domain": "Lablisscakesandsweeties.com.ng",
+    "headline": "Order fresh meatpie, shawarma and sweet treats in large quantity.",
+    "intro": "Build your order, choose delivery or pickup, get instant totals in naira, pay securely with Paystack, and receive a receipt with delivery time.",
+    "phone": "+2348065964065",
+    "whatsapp": "+2348065964065",
+    "instagram": "la_blisscakesnsweeties",
+    "tiktok": "La_blisscakesnsweeties",
+    "email": "orders@lablisscakesandsweeties.com.ng",
+    "address": "Mbaise Owerri Road, Imo State",
+    "serviceFeePercent": 1.5,
+    "deliveryBaseFee": 1000,
+    "deliveryPerKm": 220,
+    "longDistanceSurcharge": 1500,
+    "longDistanceKm": 15
+  }
+}
