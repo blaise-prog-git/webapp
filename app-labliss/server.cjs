@@ -1,8 +1,8 @@
 const http = require("http");
 const https = require("https");
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
+const fs = require("node:fs");
+const path = require("node:path");
+const crypto = require("node:crypto");
 
 loadEnv();
 
@@ -15,34 +15,34 @@ const DB_PATH = path.join(__dirname, "data", "db.json");
 const PUBLIC_DIR = path.join(__dirname, "dist");
 
 const defaultMenu = [
-  { id: "meatpie", name: "Meatpie", category: "Pastries", price: 900, minQty: 10, available: true, prepMinutes: 35 },
-  { id: "sausage", name: "Sausage Roll", category: "Pastries", price: 700, minQty: 10, available: true, prepMinutes: 30 },
+  { id: "meatpie", name: "Meatpie", category: "Pastries", price: 500, minQty: 1, available: true, prepMinutes: 5 },
+  { id: "sausage", name: "Sausage Roll", category: "Pastries", price: 700, minQty: 1, available: true, prepMinutes: 5 },
   // Shawarma parent item (displayed in menu with variant picker)
-  { id: "shawarma", name: "Shawarma", category: "Meals", price: 3000, minQty: 5, available: true, prepMinutes: 45, hasVariants: true },
+  { id: "shawarma", name: "Shawarma", category: "Meals", price: 3000, minQty: 1, available: true, prepMinutes: 15, hasVariants: true },
   // Shawarma variants (hidden from menu grid, for server lookup only)
-  { id: "shawarma-beef", name: "Shawarma (Beef)", category: "Meals", price: 3000, minQty: 5, available: true, prepMinutes: 45, isVariant: true },
-  { id: "shawarma-chicken", name: "Shawarma (Chicken)", category: "Meals", price: 3800, minQty: 5, available: true, prepMinutes: 45, isVariant: true },
-  { id: "shawarma-hotdog", name: "Shawarma (Hotdog)", category: "Meals", price: 3500, minQty: 5, available: true, prepMinutes: 45, isVariant: true },
-  { id: "shawarma-chicken-hotdog", name: "Shawarma (Chicken & Hotdog)", category: "Meals", price: 4300, minQty: 5, available: true, prepMinutes: 50, isVariant: true },
-  { id: "shawarma-beef-chicken", name: "Shawarma (Beef & Chicken)", category: "Meals", price: 4200, minQty: 5, available: true, prepMinutes: 50, isVariant: true },
+  { id: "shawarma-beef", name: "Shawarma (Beef)", category: "Meals", price: 3000, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
+  { id: "shawarma-chicken", name: "Shawarma (Chicken)", category: "Meals", price: 3800, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
+  { id: "shawarma-hotdog", name: "Shawarma (Hotdog)", category: "Meals", price: 3500, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
+  { id: "shawarma-chicken-hotdog", name: "Shawarma (Chicken & Hotdog)", category: "Meals", price: 4300, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
+  { id: "shawarma-beef-chicken", name: "Shawarma (Beef & Chicken)", category: "Meals", price: 4200, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
   { id: "shawarma-jumbo", name: "Shawarma (Jumbo)", category: "Meals", price: 5300, minQty: 3, available: true, prepMinutes: 55, isVariant: true },
-  { id: "shawarma-super-jumbo", name: "Shawarma (Super Jumbo)", category: "Meals", price: 6500, minQty: 2, available: true, prepMinutes: 60, isVariant: true },
-  { id: "shawarma-special", name: "Shawarma (La_Bliss Special)", category: "Meals", price: 7000, minQty: 2, available: true, prepMinutes: 60, isVariant: true },
-  { id: "spaghetti", name: "Spaghetti Pack", category: "Meals", price: 2500, minQty: 5, available: true, prepMinutes: 50 },
-  { id: "fruit-parfait", name: "Fruit Parfait", category: "Treats", price: 1800, minQty: 6, available: true, prepMinutes: 25 },
-  { id: "yogurt", name: "Yogurt", category: "Drinks", price: 1200, minQty: 6, available: true, prepMinutes: 15 },
+  { id: "shawarma-super-jumbo", name: "Shawarma (Super Jumbo)", category: "Meals", price: 6500, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
+  { id: "shawarma-special", name: "Shawarma (La_Bliss Special)", category: "Meals", price: 7000, minQty: 1, available: true, prepMinutes: 15, isVariant: true },
+  { id: "spaghetti", name: "Spaghetti Pack", category: "Meals", price: 2500, minQty: 1, available: true, prepMinutes: 15 },
+  { id: "fruit-parfait", name: "Fruit Parfait", category: "Treats", price: 5000, minQty: 1, available: true, prepMinutes: 10 },
+  { id: "yogurt", name: "Hollandia Yogurt", category: "Drinks", price: 1800, minQty: 1, available: true, prepMinutes: 2 },
   // Soft Drinks parent item (displayed in menu with variant picker)
-  { id: "soft-drink", name: "Soft Drink", category: "Drinks", price: 500, minQty: 12, available: true, prepMinutes: 10, hasVariants: true },
+  { id: "soft-drink", name: "Soft Drink", category: "Drinks", price: 500, minQty: 1, available: true, prepMinutes: 2, hasVariants: true },
   // Soft drink variants (hidden from menu grid, for server lookup only)
-  { id: "soft-drink-pepsi", name: "Soft Drink (Pepsi)", category: "Drinks", price: 500, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-fanta", name: "Soft Drink (Fanta)", category: "Drinks", price: 500, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-sprite", name: "Soft Drink (Sprite)", category: "Drinks", price: 500, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-coca-cola", name: "Soft Drink (Coca-Cola)", category: "Drinks", price: 500, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-fanta-blackcurrant", name: "Soft Drink (Fanta Blackcurrant)", category: "Drinks", price: 500, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-schweppes", name: "Soft Drink (Schweppes)", category: "Drinks", price: 600, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-5alive", name: "Soft Drink (5 Alive)", category: "Drinks", price: 800, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "soft-drink-chivita", name: "Soft Drink (Chivita)", category: "Drinks", price: 800, minQty: 12, available: true, prepMinutes: 10, isVariant: true },
-  { id: "juice", name: "Juice", category: "Drinks", price: 1000, minQty: 6, available: true, prepMinutes: 10 }
+  { id: "soft-drink-pepsi", name: "Soft Drink (Pepsi)", category: "Drinks", price: 500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-fanta", name: "Soft Drink (Fanta)", category: "Drinks", price: 500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-sprite", name: "Soft Drink (Sprite)", category: "Drinks", price: 500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-coca-cola", name: "Soft Drink (Coca-Cola)", category: "Drinks", price: 500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-fanta-blackcurrant", name: "Soft Drink (Fanta Blackcurrant)", category: "Drinks", price: 500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-schweppes", name: "Soft Drink (Schweppes)", category: "Drinks", price: 800, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-5alive", name: "Soft Drink (5 Alive)", category: "Drinks", price: 1500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "soft-drink-chivita", name: "Soft Drink (Chivita)", category: "Drinks", price: 1500, minQty: 1, available: true, prepMinutes: 2, isVariant: true },
+  { id: "juice", name: "V-Smartic", category: "Drinks", price: 2500, minQty: 1, available: true, prepMinutes: 10 }
 ];
 
 const defaultDeliveryZones = [
@@ -63,11 +63,11 @@ const defaultBusinessInfo = {
   instagram: "la_blisscakesnsweeties",
   tiktok: "La_blisscakesnsweeties",
   email: "orders@lablisscakesandsweeties.com.ng",
-  address: "Mbaise Owerri Road, Imo State",
+  address: "Big tyre Mbaise Owerri Road, Imo State",
   serviceFeePercent: 1.5,
   deliveryBaseFee: 1000,
   deliveryPerKm: 220,
-  longDistanceSurcharge: 1500,
+  longDistanceSurcharge: 3000,
   longDistanceKm: 15
 };
 
@@ -110,8 +110,9 @@ server.listen(PORT, () => {
 async function handleApi(req, res, url) {
   if (req.method === "GET" && url.pathname === "/api/public-config") {
     const db = readDb();
-    // Filter out isVariant items — they are lookup entries for the server only
-    const displayMenu = db.menu.filter((item) => item.available && !item.isVariant);
+    // Return customer-friendly menu data. Variant products are grouped back under
+    // their parent item so customers can choose a variety before adding to cart.
+    const displayMenu = buildPublicMenu(db.menu);
     sendJson(res, 200, {
       menu: displayMenu,
       deliveryZones: db.deliveryZones,
@@ -145,6 +146,13 @@ async function handleApi(req, res, url) {
     const body = await readJson(req);
     const user = loginUser(body.email, body.password);
     sendJson(res, 200, { user: publicUser(user), token: user.token });
+    return;
+  }
+
+  // Paystack server-to-server webhook. Keep this route before the normal JSON
+  // body parser because Paystack's signature is calculated from the exact raw body.
+  if (req.method === "POST" && url.pathname === "/api/paystack/webhook") {
+    await handlePaystackWebhook(req, res);
     return;
   }
 
@@ -249,6 +257,67 @@ function serveStatic(req, res, url) {
     }
     sendBuffer(res, 200, data, mimeTypes[path.extname(filePath)] || "application/octet-stream");
   });
+}
+
+function buildPublicMenu(menu) {
+  const items = Array.isArray(menu) ? menu.filter((item) => item.available) : [];
+  const byId = new Map(items.map((item) => [item.id, item]));
+  const grouped = [];
+  const consumed = new Set();
+
+  // These are the variety families currently used by the store. Keeping the
+  // grouping on the server means customers receive the same live prices/minimums
+  // that the quote endpoint uses.
+  const families = [
+    { parentId: "shawarma", prefix: "shawarma-" },
+    { parentId: "soft-drink", prefix: "soft-drink-" }
+  ];
+
+  for (const family of families) {
+    const parent = byId.get(family.parentId);
+    const variants = items
+      .filter((item) => item.id.startsWith(family.prefix))
+      .map((item) => ({
+        id: item.id,
+        name: item.name.replace(/^Shawarma\s*\(|^Soft Drink\s*\(/i, "").replace(/\)$/, ""),
+        price: item.price,
+        minQty: item.minQty,
+        prepMinutes: item.prepMinutes,
+        available: item.available
+      }));
+
+    if (variants.length) {
+      const base = parent || variants[0];
+      grouped.push({
+        id: family.parentId,
+        name: parent?.name || (family.parentId === "shawarma" ? "Shawarma" : "Soft Drink"),
+        category: base.category,
+        price: Math.min(...variants.map((v) => v.price)),
+        minQty: parent?.minQty || Math.min(...variants.map((v) => v.minQty)),
+        available: true,
+        prepMinutes: parent?.prepMinutes || Math.max(...variants.map((v) => v.prepMinutes)),
+        hasVariants: true,
+        variants
+      });
+      consumed.add(family.parentId);
+      variants.forEach((v) => consumed.add(v.id));
+    }
+  }
+
+  for (const item of items) {
+    if (consumed.has(item.id)) continue;
+    grouped.push({
+      id: item.id,
+      name: item.name,
+      category: item.category,
+      price: item.price,
+      minQty: item.minQty,
+      available: item.available,
+      prepMinutes: item.prepMinutes
+    });
+  }
+
+  return grouped;
 }
 
 function buildQuote(items, fulfillment) {
@@ -391,6 +460,115 @@ async function initializePayment(body) {
     accessCode: paystack.data.access_code,
     reference: order.reference
   };
+}
+
+async function handlePaystackWebhook(req, res) {
+  const rawBody = await readRawBody(req);
+  const signature = String(req.headers["x-paystack-signature"] || "");
+
+  if (!process.env.PAYSTACK_SECRET_KEY) {
+    console.error("Paystack webhook received but PAYSTACK_SECRET_KEY is not configured.");
+    sendText(res, 500, "Webhook is not configured.");
+    return;
+  }
+
+  const expectedSignature = crypto
+    .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
+    .update(rawBody)
+    .digest("hex");
+
+  const expectedBuffer = Buffer.from(expectedSignature, "utf8");
+  const receivedBuffer = Buffer.from(signature, "utf8");
+
+  if (expectedBuffer.length !== receivedBuffer.length || !crypto.timingSafeEqual(expectedBuffer, receivedBuffer)) {
+    console.warn("Rejected Paystack webhook: invalid signature.");
+    sendText(res, 401, "Invalid signature.");
+    return;
+  }
+
+  let event;
+  try {
+    event = JSON.parse(rawBody.toString("utf8"));
+  } catch {
+    sendText(res, 400, "Invalid JSON.");
+    return;
+  }
+
+  console.log(`Paystack webhook received: ${event.event || "unknown"}`);
+
+  // We only need charge.success to confirm an order. Returning 200 for other
+  // valid Paystack events prevents unnecessary retries.
+  if (event.event !== "charge.success") {
+    sendJson(res, 200, { received: true, handled: false, event: event.event || null });
+    return;
+  }
+
+  const payment = event.data || {};
+  const reference = String(payment.reference || "").trim();
+  const metadataOrderId = String(payment.metadata?.orderId || "").trim();
+
+  if (!reference) {
+    console.error("Paystack charge.success webhook has no transaction reference.");
+    sendText(res, 400, "Missing transaction reference.");
+    return;
+  }
+
+  const db = readDb();
+  const order =
+    db.orders.find((item) => item.reference === reference) ||
+    (metadataOrderId ? db.orders.find((item) => item.id === metadataOrderId) : null);
+
+  if (!order) {
+    console.warn(`Paystack payment received for unknown order: ${reference}`);
+    // The webhook is valid, but there is nothing in this database to update.
+    // A 200 prevents Paystack from retrying an event that cannot be fulfilled.
+    sendJson(res, 200, { received: true, handled: false, reason: "order_not_found" });
+    return;
+  }
+
+  const expectedAmount = Math.round(Number(order.quote?.total || 0) * 100);
+  const receivedAmount = Number(payment.amount);
+  const currency = String(payment.currency || "NGN").toUpperCase();
+
+  // Never mark an order paid if the signed event does not match the order
+  // amount/currency. This protects against accidentally fulfilling the wrong amount.
+  if (currency !== "NGN" || !Number.isFinite(receivedAmount) || receivedAmount !== expectedAmount) {
+    console.error("Paystack payment amount/currency mismatch:", {
+      reference,
+      orderId: order.id,
+      expectedAmount,
+      receivedAmount,
+      currency
+    });
+    sendText(res, 400, "Payment amount or currency does not match order.");
+    return;
+  }
+
+  if (String(payment.status || "").toLowerCase() !== "success") {
+    sendJson(res, 200, { received: true, handled: false, paymentStatus: payment.status || null });
+    return;
+  }
+
+  // Idempotent: Paystack may deliver the same event more than once.
+  if (order.paymentStatus !== "paid") {
+    order.paymentStatus = "paid";
+    order.status = "confirmed";
+    order.receipt = order.receipt || buildReceipt(order);
+    order.updatedAt = new Date().toISOString();
+    writeDb(db);
+    console.log(`Order ${order.id} marked paid from Paystack webhook (${reference}).`);
+  } else {
+    console.log(`Paystack webhook already processed for order ${order.id} (${reference}).`);
+  }
+
+  sendJson(res, 200, {
+    received: true,
+    handled: true,
+    orderId: order.id,
+    reference,
+    paymentStatus: order.paymentStatus,
+    status: order.status
+  });
 }
 
 async function verifyPayment(reference) {
@@ -582,6 +760,26 @@ function requireStaff(req) {
   if (pin !== STAFF_PIN && pin !== ADMIN_PIN) throw httpError(401, "Staff PIN required.");
 }
 
+function readRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let total = 0;
+
+    req.on("data", (chunk) => {
+      total += chunk.length;
+      if (total > 1_000_000) {
+        req.destroy();
+        reject(httpError(413, "Request body too large."));
+        return;
+      }
+      chunks.push(chunk);
+    });
+
+    req.on("end", () => resolve(Buffer.concat(chunks)));
+    req.on("error", reject);
+  });
+}
+
 function readJson(req) {
   return new Promise((resolve, reject) => {
     let data = "";
@@ -605,10 +803,22 @@ function readJson(req) {
 function ensureDb() {
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
   const current = fs.existsSync(DB_PATH) ? JSON.parse(fs.readFileSync(DB_PATH, "utf8")) : {};
+  const existingMenu = Array.isArray(current.menu) && current.menu.length ? current.menu : defaultMenu;
+
+  // Older db.json files may contain the Soft Drink parent but not its individual
+  // varieties. Restore only missing default variant records so the customer
+  // picker and server-side quote/order validation use the same products. Existing
+  // prices, availability settings, and custom menu entries are preserved.
+  const existingIds = new Set(existingMenu.map((item) => item.id));
+  const missingDefaultVariants = defaultMenu.filter((item) =>
+    item.isVariant && !existingIds.has(item.id)
+  );
+  const menu = [...existingMenu, ...missingDefaultVariants];
+
   const db = {
     users: Array.isArray(current.users) ? current.users : [],
     orders: Array.isArray(current.orders) ? current.orders : [],
-    menu: Array.isArray(current.menu) && current.menu.length ? current.menu : defaultMenu,
+    menu,
     deliveryZones: Array.isArray(current.deliveryZones) && current.deliveryZones.length ? current.deliveryZones : defaultDeliveryZones,
     businessInfo: current.businessInfo ? { ...defaultBusinessInfo, ...current.businessInfo } : defaultBusinessInfo
   };

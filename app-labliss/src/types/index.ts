@@ -2,6 +2,9 @@ export interface Variant {
   id: string;
   name: string;
   price: number;
+  minQty?: number;
+  prepMinutes?: number;
+  available?: boolean;
 }
 
 export interface MenuItem {

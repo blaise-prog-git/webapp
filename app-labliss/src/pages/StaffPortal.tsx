@@ -220,8 +220,49 @@ export function StaffPortal() {
                     {order.quote.items.length} item{order.quote.items.length > 1 ? 's' : ''} &bull; {formatNaira(order.quote.total)}
                   </div>
 
+                  {/* Full Order Details */}
+                  <div className="mt-4 rounded-lg bg-[#1E293B]/70 border border-white/10 p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-white text-sm font-semibold">Order contents</h3>
+                      <span className={`text-xs font-medium ${order.paymentStatus === 'paid' || order.paymentStatus === 'demo' ? 'text-green-400' : 'text-amber-400'}`}>
+                        Payment: {order.paymentStatus || 'unpaid'}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {(Array.isArray(order.quote?.items) ? order.quote.items : []).length > 0 ? (
+                        order.quote.items.map((item, index) => {
+                          const quantity = Number(item.quantity || 0);
+                          const unitPrice = Number(item.unitPrice ?? 0);
+                          const lineTotal = Number(item.lineTotal ?? unitPrice * quantity);
+                          return (
+                            <div key={`${item.id || item.name || 'item'}-${index}`} className="flex items-start justify-between gap-4 text-sm">
+                              <div className="min-w-0">
+                                <p className="text-white/90 font-medium">{item.name || 'Unnamed item'}</p>
+                                <p className="text-white/40 text-xs">{quantity} × {formatNaira(unitPrice)}</p>
+                              </div>
+                              <span className="text-white/80 font-semibold whitespace-nowrap">{formatNaira(lineTotal)}</span>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        <p className="text-white/50 text-sm">Item details are unavailable for this order.</p>
+                      )}
+                    </div>
+                    <div className="border-t border-white/10 mt-3 pt-3 space-y-1 text-xs">
+                      <div className="flex justify-between text-white/50"><span>Subtotal</span><span>{formatNaira(order.quote.subtotal)}</span></div>
+                      <div className="flex justify-between text-white/50"><span>Delivery</span><span>{formatNaira(order.quote.deliveryFee)}</span></div>
+                      <div className="flex justify-between text-white/50"><span>Service</span><span>{formatNaira(order.quote.serviceFee)}</span></div>
+                      <div className="flex justify-between text-white font-bold text-sm pt-1"><span>Total</span><span>{formatNaira(order.quote.total)}</span></div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-white/10 text-xs text-white/50 space-y-1">
+                      <p><span className="text-white/30">Fulfillment:</span> {order.fulfillment.type === 'delivery' ? `Delivery · ${order.fulfillment.address || 'Address not provided'}` : 'Pickup'}</p>
+                      {order.customer.note && <p><span className="text-white/30">Customer note:</span> {order.customer.note}</p>}
+                      <p><span className="text-white/30">Reference:</span> {order.reference}</p>
+                    </div>
+                  </div>
+
                   {/* Actions */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mt-4">
                     {order.status === 'confirmed' && (
                       <button
                         onClick={() => updateStatus(order.id, 'preparing')}

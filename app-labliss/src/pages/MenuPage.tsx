@@ -132,9 +132,9 @@ export function MenuPage() {
         name: `${menuItem.name} (${variant.name})`,
         category: menuItem.category,
         price: variant.price,
-        minQty: menuItem.minQty,
-        available: true,
-        prepMinutes: menuItem.prepMinutes,
+        minQty: variant.minQty ?? menuItem.minQty,
+        available: variant.available !== false,
+        prepMinutes: variant.prepMinutes ?? menuItem.prepMinutes,
       },
       variant.name,
       variant.price
@@ -308,7 +308,7 @@ export function MenuPage() {
                               >
                                 <div className="flex-1 min-w-0">
                                   <p className="font-medium text-gray-900 text-sm">{variant.name}</p>
-                                  <p className="text-[#E85D2B] font-semibold text-sm">{formatNaira(variant.price)}</p>
+                                  <p className="text-[#E85D2B] font-semibold text-sm">{formatNaira(variant.price)} · Min {variant.minQty ?? item.minQty}</p>
                                 </div>
                                 <div className="flex items-center gap-2 ml-3">
                                   {vQty > 0 ? (

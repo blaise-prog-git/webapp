@@ -234,7 +234,7 @@ export function DeliveryPage() {
                   className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-900 focus:border-[#E85D2B] outline-none transition-all appearance-none"
                 >
                   <option value="">Select a time</option>
-                  {['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'].map(
+                  {['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM'].map(
                     (t) => (
                       <option key={t} value={t}>
                         {t}
